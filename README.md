@@ -1,5 +1,7 @@
 # Typing Master Ultra Pro Max
 
+🚀 **Live Demo:** [https://gajjarkaran.github.io/typing-master/](https://gajjarkaran.github.io/typing-master/)
+
 Typing Master Ultra Pro Max is a modern, feature-rich typing speed test application built with React and Vite. It offers multiple modes to help you practice and improve your typing speed and accuracy, including time-based, word-count, quote, zen, and custom text modes. The app features a clean, responsive UI, real-time statistics, and several beautiful themes to personalize your experience.
 
 > **Inspired by [Monkeytype](https://monkeytype.com/) and proudly vibe coded.**
