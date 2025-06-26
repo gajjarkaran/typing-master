@@ -40,6 +40,7 @@ export default function TypingTest({ mode = "time", duration = 60, wordCount = 2
     const [correctEntries, setCorrectEntries] = useState(0);
     const [incorrectEntries, setIncorrectEntries] = useState(0);
     const containerRef = useRef(null);
+    const inputRef = useRef(null);
     const [caretPos, setCaretPos] = useState(0);
 
     // Start timer when typing starts (time mode)
@@ -54,9 +55,9 @@ export default function TypingTest({ mode = "time", duration = 60, wordCount = 2
         return () => clearInterval(interval);
     }, [started, timer, finished, mode]);
 
-    // Focus container on mount
+    // Focus input on mount
     useEffect(() => {
-        if (containerRef.current) containerRef.current.focus();
+        if (inputRef.current) inputRef.current.focus();
     }, []);
 
     // Reset when options change
@@ -70,28 +71,20 @@ export default function TypingTest({ mode = "time", duration = 60, wordCount = 2
         setCorrectEntries(0);
         setIncorrectEntries(0);
         setCaretPos(0);
+        if (inputRef.current) inputRef.current.focus();
     }, [duration, wordCount, punctuation, numbers, mode, quote, customText]);
 
-    // Keyboard input handler
-    function handleKeyDown(e) {
-        if (finished && mode !== "zen") return;
-        if (e.ctrlKey || e.metaKey || e.altKey) return;
-        if (!started) setStarted(true);
-        if (e.key === "Tab") {
-            e.preventDefault();
-            restartTest();
-            return;
-        }
-        if (e.key === "Backspace") {
-            if (input.length > 0) {
-                setInput(input.slice(0, -1));
-                setCaretPos(Math.max(0, caretPos - 1));
-            }
-            return;
-        }
-        if (e.key === " " || e.key === "Spacebar") {
-            // On space, check word
-            const trimmed = input.trim();
+    // Focus input when container is clicked/tapped
+    function handleContainerClick() {
+        if (inputRef.current) inputRef.current.focus();
+    }
+
+    // Keyboard input handler (for input field)
+    function handleInputChange(e) {
+        const value = e.target.value;
+        // If user types space, treat as word submission
+        if (value.endsWith(" ")) {
+            const trimmed = value.trim();
             if (trimmed === words[currentWordIdx]) {
                 setCorrectEntries((c) => c + 1);
             } else {
@@ -100,12 +93,20 @@ export default function TypingTest({ mode = "time", duration = 60, wordCount = 2
             setCurrentWordIdx((idx) => idx + 1);
             setInput("");
             setCaretPos(0);
+            if (!started) setStarted(true);
             return;
         }
-        if (e.key.length === 1) {
-            setInput(input + e.key);
-            setCaretPos(caretPos + 1);
+        // Handle backspace
+        if (input.length > value.length) {
+            setInput(value);
+            setCaretPos(Math.max(0, caretPos - 1));
+            if (!started) setStarted(true);
+            return;
         }
+        // Normal character input
+        setInput(value);
+        setCaretPos(value.length);
+        if (!started) setStarted(true);
     }
 
     // End test in words/quote/custom mode when all words are typed
@@ -126,7 +127,7 @@ export default function TypingTest({ mode = "time", duration = 60, wordCount = 2
         setCorrectEntries(0);
         setIncorrectEntries(0);
         setCaretPos(0);
-        if (containerRef.current) containerRef.current.focus();
+        if (inputRef.current) inputRef.current.focus();
     }
 
     // Zen mode: infinite words, never finish
@@ -151,10 +152,28 @@ export default function TypingTest({ mode = "time", duration = 60, wordCount = 2
     return (
         <div
             className="typing-test-container"
-            tabIndex={0}
             ref={containerRef}
-            onKeyDown={handleKeyDown}
+            onClick={handleContainerClick}
+            onTouchStart={handleContainerClick}
         >
+            {/* Visually hidden input for mobile typing */}
+            <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={handleInputChange}
+                autoFocus
+                style={{
+                    position: 'absolute',
+                    opacity: 0,
+                    pointerEvents: 'none',
+                    width: '1px',
+                    height: '1px',
+                    zIndex: -1
+                }}
+                tabIndex={0}
+                aria-label="Typing input"
+            />
             <div className="typing-test-header">
                 {mode === "time" && <div className="typing-timer">Time: {timer}s</div>}
                 {mode === "words" && <div className="typing-timer">Words: {currentWordIdx}/{words.length}</div>}
