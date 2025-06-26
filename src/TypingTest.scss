@@ -1,0 +1,234 @@
+.typing-test-container {
+  width: 100%;
+  // max-width: 700px;
+  max-width: 90%;
+  background: var(--primary-bg);
+  border-radius: 1.2rem;
+  padding: 2.5rem 2rem 2rem 2rem;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background-color 0.3s ease;
+  border: none !important;
+  outline: none;
+  box-shadow: none;
+
+  * {
+    border-color: transparent !important;
+  }
+}
+
+.typing-test-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  border: none;
+}
+
+.typing-timer {
+  color: var(--accent);
+  font-weight: bold;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.typing-restart-btn {
+  font-size: 1.1rem;
+  padding: 0.6rem;
+  border-radius: 8px;
+  background: var(--primary-bg);
+  color: var(--primary-text);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  margin-left: 0.5rem;
+  position: relative;
+
+  &:hover {
+    background: var(--accent-dark);
+    color: #fff;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.typing-words {
+  text-align: center;
+  font-size: 1.3rem;
+  min-height: 80px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.7rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  color: var(--primary-text);
+  transition: color 0.3s ease;
+  border: none;
+}
+
+.typing-word {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: baseline;
+  padding: 0 0.38em;
+  border-radius: 5px;
+  background: transparent;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  font-size: 1.3rem;
+  line-height: inherit;
+  border: none;
+
+  &.completed {
+    color: var(--word-completed);
+    opacity: 0.5;
+  }
+}
+
+.typing-input {
+  margin-top: 1.5rem;
+  width: 100%;
+  max-width: 350px;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  background: var(--primary-bg);
+  color: var(--primary-text);
+  border: 1.5px solid var(--border);
+  font-size: 1.1rem;
+  font-family: "Fira Mono", "Menlo", "Monaco", "Consolas", monospace;
+  outline: none;
+  box-shadow: 0 2px 8px 0 rgba(30, 64, 175, 0.08);
+  caret-color: var(--accent);
+  transition: border 0.2s, box-shadow 0.2s, background-color 0.3s ease,
+    color 0.3s ease;
+
+  &:focus {
+    border: 1.5px solid var(--accent);
+    box-shadow: 0 2px 12px 0 rgba(37, 99, 235, 0.12);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.typing-results {
+  margin-top: 2.2rem;
+  background: none;
+  border-radius: 0;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  position: relative;
+
+  &::before,
+  &::after {
+    display: none;
+  }
+}
+
+.results-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--accent);
+  margin-bottom: 0.7rem;
+  transition: color 0.3s ease;
+}
+
+.results-wpm span {
+  color: var(--accent);
+  font-size: 1.3em;
+  font-family: "Fira Mono", "Menlo", "Monaco", "Consolas", monospace;
+  transition: color 0.3s ease;
+}
+
+.results-accuracy span {
+  color: var(--accent);
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.results-correct span {
+  color: var(--success);
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.results-incorrect span {
+  color: var(--error);
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.correct-letter {
+  color: var(--success);
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.incorrect-letter {
+  color: var(--error);
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.typing-caret {
+  display: inline-block;
+  width: 1.5px;
+  height: 1.1em;
+  background: var(--accent);
+  margin-left: 0.5px;
+  margin-right: 0.5px;
+  vertical-align: middle;
+  animation: blink 1s steps(1) infinite;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 0 6px 1.5px var(--accent);
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Nuclear fix for any line between results and footer */
+.app-footer,
+.typing-results,
+.typing-test-container,
+.main-content,
+body,
+#root {
+  border: none !important;
+  border-top: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  background: var(--primary-bg) !important;
+}
+
+.app-footer::before,
+.app-footer::after,
+.typing-results::before,
+.typing-results::after {
+  display: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: none !important;
+  content: none !important;
+}
